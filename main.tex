@@ -48,7 +48,50 @@ citestyle	= gost-numeric,
 autolang	= other]{biblatex}
 \addbibresource{mybiblio.bib}
 
+\usepackage{xstring} % Для преподов
+% Команда для вставки изображения из google drive по ссылке
+\newcommand{\includegoogle}[3][]{
+	% Извлекаем ID
+	\StrBehind{#2}{/file/d/}[\tempurl]%
+	\StrBefore{\tempurl}{/}[\fileid]%
+	\StrBehind{#2}{id=}[\tempurlb]%
+	\StrBefore{\tempurlb}{&}[\fileidb]%
+	
+	\IfStrEq{\fileid}{}{%
+		\IfStrEq{\fileidb}{}{%
+			\def\finalid{#2}%
+		}{
+			\def\finalid{\fileidb}%
+		}
+	}{
+		\def\finalid{\fileid}%
+	}	
+	% Скачиваем изображение
+	\immediate\write18{curl -s -L -o temp-image.jpg "https://drive.google.com/uc?export=download&id=\finalid"}%
+	
+	% Вставляем изображение
+	\IfFileExists{temp-image.jpg}{
+		\begin{figure}[h]
+			\centering
+			\includegraphics[#1]{temp-image.jpg}
+			\caption{#3} % <-- Используем переданный заголовок
+		\end{figure}
+	}{
+		\fbox{\parbox{0.8\textwidth}{\centering\textcolor{red}{Error}\\Link: #2\\ID: \finalid}}%
+	}
+	% Удаляем временный файл
+	\immediate\write18{del temp-image.jpg 2>nul}%
+}
+
 \begin{document}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% Как вставлять картинки?
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	% В TexStudio в Параметры -> Команды -> PdLaTeX должно быть написано smth -shell-escape %.tex
+	% Как работать в других редакторах - не знаю, но если есть идеи - дополняйте!
+	% 	\includegoogle[width=0.8\textwidth]{ссылка на изображение с google drive - оно должно быть открыто для просмотра}{Подпись к картинке}
+	%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	
 	\input{titlepage}
 	\input{contents}
 	\input{reductions}
