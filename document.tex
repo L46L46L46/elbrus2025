@@ -1,0 +1,48 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{xstring}
+
+\newcommand{\includegoogle}[3][]{%
+	% #1 - опции изображения (width, height и т.д.)
+	% #2 - ссылка на Google Drive
+	% #3 - заголовок (caption)
+	
+	% Извлекаем ID
+	\StrBehind{#2}{/file/d/}[\tempurl]%
+	\StrBefore{\tempurl}{/}[\fileid]%
+	\StrBehind{#2}{id=}[\tempurlb]%
+	\StrBefore{\tempurlb}{&}[\fileidb]%
+	
+	\IfStrEq{\fileid}{}{%
+		\IfStrEq{\fileidb}{}{%
+			\def\finalid{#2}%
+		}{%
+			\def\finalid{\fileidb}%
+		}%
+	}{%
+		\def\finalid{\fileid}%
+	}%
+	
+	% Скачиваем изображение
+	\immediate\write18{curl -s -L -o temp-image.jpg "https://drive.google.com/uc?export=download&id=\finalid"}%
+	
+	% Вставляем изображение
+	\IfFileExists{temp-image.jpg}{%
+		\begin{figure}[h]
+			\centering
+			\includegraphics[#1]{temp-image.jpg}
+			\caption{#3} % <-- Используем переданный заголовок
+		\end{figure}
+	}{%
+		\fbox{\parbox{0.8\textwidth}{\centering\textcolor{red}{Error}\\Link: #2\\ID: \finalid}}%
+	}%
+	
+	% Удаляем временный файл
+	\immediate\write18{del temp-image.jpg 2>nul}%
+}
+
+\begin{document}
+	
+	\includegoogle[width=0.8\textwidth]{https://drive.google.com/file/d/13Ac5B8-UVlCZOaQBOB0RhMy3C7saUSXi/view?usp=sharing}{Test}
+\end{document}
