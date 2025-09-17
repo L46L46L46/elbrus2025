@@ -50,7 +50,7 @@ autolang	= other]{biblatex}
 
 \usepackage{xstring} % Для преподов
 % Команда для вставки изображения из google drive по ссылке
-\newcommand{\includegoogle}[3][]{
+\newcommand{\includegoogle}[2][]{
 	% Извлекаем ID
 	\StrBehind{#2}{/file/d/}[\tempurl]%
 	\StrBefore{\tempurl}{/}[\fileid]%
@@ -71,11 +71,7 @@ autolang	= other]{biblatex}
 	
 	% Вставляем изображение
 	\IfFileExists{temp-image.jpg}{
-		\begin{figure}[h]
-			\centering
 			\includegraphics[#1]{temp-image.jpg}
-			\caption{#3} % <-- Используем переданный заголовок
-		\end{figure}
 	}{
 		\fbox{\parbox{0.8\textwidth}{\centering\textcolor{red}{Error}\\Link: #2\\ID: \finalid}}%
 	}
@@ -97,7 +93,7 @@ autolang	= other]{biblatex}
 	\input{reductions}
 	\input{generalInfo}
 	\input{organisation}
-	\input{review}
+%	\input{review}
 	\input{techDescription}
 	\input{materials}
 	\input{finances}
