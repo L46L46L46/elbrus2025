@@ -105,9 +105,9 @@ def plot_elevation_data(gpx):
     plt.show()
 
 if __name__ == "__main__":
-    # input_folder = input("Введите путь к папке с GPX-файлами: ").strip()
+    input_folder = input("Введите путь к папке с GPX-файлами: ").strip()
     # output_file = input("Введите имя выходного GPX-файла (например: merged_tracks.gpx): ").strip()
-    
+    output_file = 'merged.gpx'
     
     
     if not os.path.isdir(input_folder):

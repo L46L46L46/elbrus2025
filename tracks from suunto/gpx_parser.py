@@ -99,39 +99,41 @@ for track in gpx.tracks:
             
 # %%
 passes = {
-    'Саватор': {
-        'point_num': 200,
-        'elevation': 4_300,
+    'а. Хурзук': {
+        'point_num': 10,
+        'elevation': 1250,
         },
     
-    'Перемётный': {
-        'point_num': 800,
-        'elevation': 4_050,
+    'Енукол': {
+        'point_num': 50,
+        'elevation': 2700,
         },
     
-    'Ашутор Зап.': {
-        'point_num': 1_400,
-        'elevation': 3_800,
+    'Быкылы-Чемарт': {
+        'point_num': 500,
+        'elevation': 3200,
         },
     
-    'Иттиш': {
-        'point_num': 2_400,
-        'elevation': 3_980,
+    'Бурунташ': {
+        'point_num': 2200,
+        'elevation': 3450,
         },
     
-    'Марс': {
-        'point_num': 3_300,
-        'elevation': 4_450,
+    'Бересун': {
+        'point_num': 4000,
+        'elevation': 2700,
         },
     
-    'Кашкасу': {
-        'point_num': 3_700,
-        'elevation': 3_950,
+    'Кыртыкауш': {
+        'point_num': 4800,
+        'elevation': 3300,
+        },
+    
+    'с. Верхний Баксан': {
+        'point_num': 5950,
+        'elevation': 1250,
         },
 }
-
-
-
 
 
 # %% distance plot
@@ -139,13 +141,13 @@ passes = {
 fig, ax = plt.subplots(figsize=(15, 6))
 my_params = {'font.size':24}
 plt.rcParams.update(my_params)
-ax.plot(df.dist,df.elevation,'b',label = "Elevation",
+ax.plot(df.dist*83/80*1.1,df.elevation,'b',label = "Elevation",
         linewidth=5)
 ax.set_xlabel("Расстояние, км")
 ax.set_ylabel("Высота, м")
 # ax.grid()
-ax.set_ylim(1900, 4700)
-ax.set_xlim(0, 125)
+ax.set_ylim(1000, 4000)
+ax.set_xlim(0, 100)
 for count, name in enumerate(passes.keys()):
     ax.annotate(name, (df.dist.iloc[passes[name]['point_num']],
                        passes[name]['elevation']))
@@ -153,36 +155,43 @@ plt.tight_layout()
 
 # %%
 passes = {
-    'Саватор': {
-        'point_num': 620,
-        'elevation': 3950,
+    'а. Хурзук': {
+        'point_num': 0,
+        'elevation': 1250,
         },
     
-    'Перемётный': {
-        'point_num': 1000,
-        'elevation': 4100,
+    'Енукол': {
+        'point_num': 70,
+        'elevation': 2700,
         },
     
-    'Ашутор Зап.': {
-        'point_num': 1_400,
-        'elevation': 3_800,
+    'Быкылы-Чемарт': {
+        'point_num': 500,
+        'elevation': 3200,
         },
     
-    'Иттиш': {
-        'point_num': 2500,
-        'elevation': 4050,
+    'Бурунташ': {
+        'point_num': 2200,
+        'elevation': 3450,
         },
     
-    'Марс': {
-        'point_num': 3358,
-        'elevation': 4_450,
+    'Бересун': {
+        'point_num': 4000,
+        'elevation': 2700,
         },
     
-    'Кашкасу': {
-        'point_num': 3750,
-        'elevation': 3_950,
+    'Кыртыкауш': {
+        'point_num': 4800,
+        'elevation': 3300,
+        },
+    
+    'с. Верхний Баксан': {
+        'point_num': 4300,
+        'elevation': 1250,
         },
 }
+
+
 # %% time plot
 
 fig, ax = plt.subplots(figsize=(15, 6))
@@ -190,15 +199,18 @@ my_params = {'font.size':24}
 plt.rcParams.update(my_params)
 ax.plot(times ,elevations,'b',label = "Elevation",
         linewidth=5)
-ax.set_xlabel("Время, дни")
+ax.set_xlabel("Дата")
 ax.set_ylabel("Высота, м") 
 
-date_form = DateFormatter("%d")
+date_form = DateFormatter("%d.%m")
 ax.xaxis.set_major_locator(MaxNLocator(500, integer=True))
 ax.xaxis.set_major_formatter(date_form)
 # ax.grid()
-ax.set_ylim(1900, 4700)
-# ax.set_xlim(0, 120)
+
+ax.set_ylim(1000, 4000)
+t_start = datetime.datetime(2025, 9, 5, 00, 00, 00)
+t_stop = datetime.datetime(2025, 9, 12, 00, 00, 00)
+ax.set_xlim(t_start, t_stop)
 for count, name in enumerate(passes.keys()):
     ax.annotate(name, (times[passes[name]['point_num']],
                        passes[name]['elevation']))

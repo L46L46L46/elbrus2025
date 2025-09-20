@@ -34,7 +34,8 @@
 
 \usepackage{comment} % Для многострочных комментариев
 \usepackage{xcolor} % Для девочек 
-\usepackage{enumitem} 
+\usepackage{enumitem}
+\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt} 
 \usepackage{wasysym} % Для смайликов
 
 \usepackage[
@@ -50,7 +51,17 @@ autolang	= other]{biblatex}
 
 \usepackage{xstring} % Для преподов
 % Команда для вставки изображения из google drive по ссылке
-\newcommand{\includegoogle}[3][]{
+\newcounter{imagecounter}
+\setcounter{imagecounter}{0}
+
+\newcommand{\includegoogle}[2][]{%
+	\stepcounter{imagecounter}%
+	\edef\tempfilename{temp-image-\theimagecounter.jpg}% % Создаем уникальное имя
+	
+	% #1 - опции изображения (width, height и т.д.)
+	% #2 - ссылка на Google Drive
+	% #3 - заголовок (caption)
+	
 	% Извлекаем ID
 	\StrBehind{#2}{/file/d/}[\tempurl]%
 	\StrBefore{\tempurl}{/}[\fileid]%
@@ -60,27 +71,29 @@ autolang	= other]{biblatex}
 	\IfStrEq{\fileid}{}{%
 		\IfStrEq{\fileidb}{}{%
 			\def\finalid{#2}%
-		}{
+		}{%
 			\def\finalid{\fileidb}%
-		}
-	}{
+		}%
+	}{%
 		\def\finalid{\fileid}%
-	}	
-	% Скачиваем изображение
-	\immediate\write18{curl -s -L -o temp-image.jpg "https://drive.google.com/uc?export=download&id=\finalid"}%
+	}%
 	
-	% Вставляем изображение
-	\IfFileExists{temp-image.jpg}{
-		\begin{figure}[h]
-			\centering
-			\includegraphics[#1]{temp-image.jpg}
-			\caption{#3} % <-- Используем переданный заголовок
-		\end{figure}
-	}{
+	\immediate\write18{curl -s -L -o "\tempfilename" "https://drive.google.com/uc?export=download&id={\finalid}"}%
+	
+	\IfFileExists{\tempfilename}{%
+		\includegraphics[#1]{\tempfilename}
+	}{%
 		\fbox{\parbox{0.8\textwidth}{\centering\textcolor{red}{Error}\\Link: #2\\ID: \finalid}}%
-	}
-	% Удаляем временный файл
-	\immediate\write18{del temp-image.jpg 2>nul}%
+	}%
+	
+%	\AtEndDocument{%
+%		\forlistloop{\immediate\write18{del "#1" 2>nul}}{\tempfileslist}%
+%	}
+	
+%	% Удаляем конкретный временный файл в конце
+%	\AtEndDocument{%
+%		\immediate\write18{del "\tempfilename" 2>nul}%
+%	}%
 }
 
 \begin{document}
@@ -97,14 +110,14 @@ autolang	= other]{biblatex}
 	\input{reductions}
 	\input{generalInfo}
 	\input{organisation}
-	\input{review}
 	\input{techDescription}
-	\input{materials}
-	\input{finances}
+%	\input{materials}
+%	\input{finances}
+	\input{medic_report}	
 	\input{nachprod_report}
-	\input{results}
+%	\input{results}
 	\input{passNotes}
-	\appendix
+%	\appendix
 	
 	%\input{passNotes}
 	
