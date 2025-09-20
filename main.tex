@@ -34,7 +34,8 @@
 
 \usepackage{comment} % Для многострочных комментариев
 \usepackage{xcolor} % Для девочек 
-\usepackage{enumitem} 
+\usepackage{enumitem}
+\setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt} 
 \usepackage{wasysym} % Для смайликов
 
 \usepackage[
@@ -112,9 +113,8 @@ autolang	= other]{biblatex}
 	\input{techDescription}
 %	\input{materials}
 %	\input{finances}
-	\input{medic_report}
-	
-%	\input{nachprod_report}
+	\input{medic_report}	
+	\input{nachprod_report}
 %	\input{results}
 	\input{passNotes}
 %	\appendix
